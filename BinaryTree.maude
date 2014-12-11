@@ -1,0 +1,33 @@
+fmod BTREE is
+	protecting NAT.
+	protecting LISTOFNATS.
+	sorts NeBTree BTree.
+	subsort NeBTree < BTree.
+	op empty : −> BTree .	
+	
+	op [ ] : BTree Nat BTree −> NeBTree.
+	op min : NeBTree −> Nat.
+	op max : NeBTree −> Nat.
+	op insert : BTree Nat −> BTree.
+	op sort : BTree −> List.
+	
+	vars N M : Nat.
+	vars LEFT RIGHT : BTree.
+	vars NELEFT NERIGHT : NeBTree.
+
+	mb empty [N] empty : NeBTree.
+	mb empty : BTree.
+	cmb NELEFT [N] empty : NeBTree if max(NELEFT) < N.
+	cmb empty [N] NERIGHT : NeBTree if N < min(NERIGHT).
+	cmb NELEFT [N] NERIGHT : NeBTree i f max(NELEFT) < N and N < min(NERIGHT).
+	eq insert (empty, M) = empty [M] empty.
+	eq insert (LEFT [N] RIGHT, N) = LEFT [N] RIGHT.
+	ceq insert (LEFT [N] RIGHT, M) = insert (LEFT , M) [N] RIGHT if M < N.
+	ceq insert (LEFT [N] RIGHT, M) = LEFT [N] insert (RIGHT, M) if N < M.
+	eq sort (empty) = nil.
+	eq sort (LEFT [N] RIGHT) = concat(sort (LEFT) cons (Nsort (RIGHT))).
+	eq min( empty [N] RIGHT) = N.
+	eq min(NELEFT [N] RIGHT) = min(NELEFT).
+	eq max(LEFT [N] empty ) = N.
+	eq max(LEFT [N] NERIGHT) = max(NERIGHT).
+endfm
